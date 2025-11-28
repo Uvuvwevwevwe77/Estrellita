@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Estrellita</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Tipografía */
+    .tangerine-regular { font-family: 'Tangerine', cursive; font-weight: 400; }
+    .tangerine-bold { font-family: 'Tangerine', cursive; font-weight: 700; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Tangerine', cursive;
+      overflow: hidden;
+    }
+
+    body {
+      background: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding-top: 0; justify-content: center; /* mantiene los botones centrados hacia la mitad */
+    }
+
+    /* Fondo visible desde el inicio */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('https://offloadmedia.feverup.com/secretbirmingham.com/wp-content/uploads/2021/05/28063415/Candlelight-Ballet-Solo-1024x683.jpg') center/cover no-repeat fixed;
+      filter: blur(5px) brightness(0.95);
+      z-index: -2;
+      transition: filter 0.6s ease;
+    }
+
+    /* Fondo se oscurece al elegir */
+    body.elegido::before { filter: brightness(0.3) blur(5px); }
+
+    /* Contador fijo arriba */
+    #contador {
+      font-size: clamp(3rem, 10vw, 8rem);
+      color: #ff0000;
+      margin-top: 0;
+      text-shadow: 2px 2px 4px black;
+      font-weight: 700;
+      transition: opacity 0.5s ease, transform 0.4s ease;
+      position: fixed;
+      top: 2vh;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+    }
+
+    .boton-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2vh;
+      width: 88%;
+      max-width: 640px;
+      position: relative;
+      z-index: 1;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button {
+      padding: 2rem 1rem;
+      font-size: clamp(2rem, 7vw, 4rem);
+      width: 92%;
+      border: none;
+      border-radius: 18px;
+      cursor: pointer;
+      background-size: cover;
+      background-position: center;
+      color: white;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: filter 0.3s ease, transform 0.3s ease;
+      font-family: 'Tangerine', cursive;
+      z-index: 2;
+    }
+
+    button:hover:not(:disabled) {
+      filter: brightness(2.5);
+      transform: scale(1.12);
+    }
+    button:hover:not(:disabled) span {
+      transform: scale(1.2);
+      transition: transform 0.3s ease;
+    }
+
+    /* crece también el texto */
+    button:hover:not(:disabled) {
+      filter: brightness(2.5);
+      transform: scale(1.12);
+    }
+    button:hover:not(:disabled) span {
+      transform: scale(1.2);
+      transition: transform 0.3s ease;
+    }
+
+    button:hover:not(:disabled) {
+      filter: brightness(2.5);
+      transform: scale(1.12);
+    }
+    button:hover:not(:disabled) span {
+      transform: scale(1.2);
+      transition: transform 0.3s ease;
+    }
+
+    button:disabled {
+      opacity: 0.6; cursor: not-allowed;
+    }
+
+    button:hover:not(:disabled) {
+      filter: brightness(2.5);
+      transform: scale(1.12);
+    }
+    button:hover:not(:disabled) span {
+      transform: scale(1.2);
+      transition: transform 0.3s ease;
+    }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Expansión cinematográfica */
+    .expandido {
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      font-size: clamp(4rem, 12vw, 10rem) !important;
+      transform: translate(-50%, -50%) !important;
+      border-radius: 0 !important;
+      z-index: 20 !important;
+      justify-content: center !important;
+      align-items: center !important;
+      background-size: cover !important;
+      transition: all 1.6s ease !important; transform-origin: center center !important;
+    }
+
+    .oculto { opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
+  </style>
+</head>
+<body>
+
+  <div id="contador" class="tangerine-bold">60</div>
+
+  <div class="boton-container">
+    <button id="botonA" class="tangerine-regular" onclick="elegir('A')"
+      style="background-image: url('https://images.unsplash.com/photo-1477132394330-d2376dc4c091?w=900&auto=format&fit=crop&q=60'); background-position: center 50%;">
+      <span>El Lago de los Cisnes</span>
+    </button>
+
+    <button id="botonB" class="tangerine-regular" onclick="elegir('B')"
+      style="background-image: url('https://www.baltana.com/files/wallpapers-18/Single-Candle-Best-Wallpaper-46910.jpg'); background-position: center 80%;">
+      <span>Candlelight</span>
+    </button>
+  </div>
+
+  <script>
+    const botonA = document.getElementById('botonA');
+    const botonB = document.getElementById('botonB');
+    const contadorDiv = document.getElementById('contador');
+
+    let tiempo = 60;
+    let cuentaAtras;
+    const modoEdicion = true; // cambiar a false para usar con los QR finales
+
+    // Start countdown
+    function iniciarCuentaAtras(){
+      cuentaAtras = setInterval(() => {
+        if (tiempo > 0) {
+          tiempo--;
+          contadorDiv.textContent = tiempo;
+        } else {
+          clearInterval(cuentaAtras);
+          contadorDiv.textContent = 'Tiempo agotado';
+          if (!modoEdicion) {
+            const auto = Math.random() < 0.5 ? 'A' : 'B';
+            elegir(auto);
+          }
+        }
+      }, 1000);
+    }
+
+    iniciarCuentaAtras();
+
+    function elegir(opcion){
+      // stop countdown
+      clearInterval(cuentaAtras);
+
+      // visual effects
+      document.body.classList.add('elegido');
+      contadorDiv.classList.add('oculto');
+
+      if(opcion === 'A'){
+        botonA.classList.add('expandido');
+        botonB.classList.add('oculto');
+      } else {
+        botonB.classList.add('expandido');
+        botonA.classList.add('oculto');
+      }
+
+      if(modoEdicion){
+        // revert after short preview
+        setTimeout(() => {
+          botonA.classList.remove('expandido','oculto');
+          botonB.classList.remove('expandido','oculto');
+          contadorDiv.classList.remove('oculto');
+          document.body.classList.remove('elegido');
+          // reset timer for preview
+          tiempo = 60;
+          iniciarCuentaAtras();
+        }, 2300);
+      } else {
+        // final mode: keep selection and disable buttons
+        botonA.disabled = true;
+        botonB.disabled = true;
+      }
+    }
+  </script>
+  <audio id="musica" autoplay loop>
+    <source src="" type="audio/mp3">
+  </audio>
+</body>
+</html>
